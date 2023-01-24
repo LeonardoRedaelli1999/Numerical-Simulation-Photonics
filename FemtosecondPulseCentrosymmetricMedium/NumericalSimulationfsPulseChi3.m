@@ -255,12 +255,12 @@ Energy1 = sum(0.5/Z0*n0(n(1:end-1), lambda0)*(U_prop(end,:)+conj(U_prop(end,:)))
 
 
 %% Save figures
-% saveas(figure(1), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure1_FS.png")
-% saveas(figure(2), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure2_FS.png")
-% saveas(figure(3), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure3_FiberCommunication.png")
-% saveas(figure(4), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure4_FiberCommunicationConst.png")
-% saveas(figure(5), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure5_FiberCommunication.png")
-% saveas(figure(6), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure6_FiberCommunicationConst.png")
+% saveas(figure(1), "Figure1_HollowCoreFiberAr.png")
+% saveas(figure(2), "Figure2_HollowCoreFiberAr.png")
+% saveas(figure(3), "Figure3_HollowCoreFiberAr.png")
+% saveas(figure(4), "Figure4_HollowCoreFiberAr.png")
+% saveas(figure(5), "Figure5_HollowCoreFiberAr.png")
+% saveas(figure(6), "Figure6_HollowCoreFiberAr.png")
 
 
 
