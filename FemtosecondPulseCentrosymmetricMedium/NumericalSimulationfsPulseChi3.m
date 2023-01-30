@@ -10,7 +10,7 @@ lambda0 = 0.8; % [microm] central wavelength of pulse (carrier)
 dt0 = 20; % [fs] temporal duration (FWHM) of pulse (envelope)
 Ipeak = 1e12; % [W/cm^2] peak intensity Ipeak = 2/Z0*n0*|E|^2 since convention Electric Field(z,t)=E(z,t)*e^i(w0t-k0z)+c.c.
 CEP = 0; % [rad] initial carrier envelope phase (I have notice a linear sensitivity of CEPout to CEPin in all scenarios)
-L = 1e0; % [m] propagation length of the pulse in the nonlinear medium (Chi3)
+L = 1; % [m] propagation length of the pulse in the nonlinear medium (Chi3)
 N = 1e3; % number of steps of the Split-Step method (propagation direction mesh)
 dl = L/N; % [m] step length (propagation direction mesh)
 Tmax = 200; % [fs] maximum time, -Tmax/2 to +Tmax/2 (electric field mesh)
@@ -172,15 +172,20 @@ end
 E_prop = U_prop*E0; % E(z,tau) "electric field" where tau=t-z/vg or (t-z/vg)/sigmat0, changes only in the plot
 S_w_prop = fftshift(fft(ifftshift(E_prop,2), [], 2),2); % S(z,w) = |Spectrum| * e^i(Spectral Phase)
 
-S_phase = -unwrap(angle(S_w_prop(end,:)));
+S_phase = unwrap(angle(S_w_prop(end,:)));
 % - sign necessary to be coherent with the fact that material with
-% GDD>0 (normal disperison) introduces effectively a GDD>0
+% GDD>0 (normal disperison) introduces effectively a GDD>0???????????????
+% NO! it's correct as it is, without the - sign. This is due to the fact
+% that I represented the pulse as e^[i(w0*t-k0*z)], and therefore it's
+% Fourier Transform is e^[-iz(k0+k0'*(w-w0)+k0''*(w-w0)^2+...)], so to find
+% the GDD one only has to take the opposite signs of the coefficients of
+% the fitted polynomial!!!!!!
 E_phase = unwrap(angle(E_prop(end,:)));
 
 % Fitting the Spectral Phase with a polynomial up to the P^th order
 P = 5;
-coeff_fit = PhaseFit(2*pi*f', 2*pi*f0, P, S_phase', S_w_prop(end,:));
-S_phase_fit = BuildPhaseFit(2*pi*f', 2*pi*f0, coeff_fit);
+coeff_fit = -PhaseFit(2*pi*f', 2*pi*f0, P, S_phase', S_w_prop(end,:));
+S_phase_fit = BuildPhaseFit(2*pi*f', 2*pi*f0, -coeff_fit);
 
 
 % Remember that GDD, TOD, etc.. are defined as [d^n(phi(w))/dw^n]@w0
@@ -190,7 +195,7 @@ disp("4^TH ORDER DISPERSION: " + num2str(coeff_fit(5)*factorial(4)) + "[fs^4/rad
 
 % Compensate dispersion of the pulse by applying an opposite spectral phase
 % with respect to the fitted one (using the fitted one is as if we measured it)
-E_ftl = DispersionCompensation(S_w_prop(end,:), S_phase);
+E_ftl = DispersionCompensation(S_w_prop(end,:), -S_phase);
 
 
 %% Plots
@@ -255,12 +260,12 @@ Energy1 = sum(0.5/Z0*n0(n(1:end-1), lambda0)*(U_prop(end,:)+conj(U_prop(end,:)))
 
 
 %% Save figures
-% saveas(figure(1), "Figure1_HollowCoreFiberAr.png")
-% saveas(figure(2), "Figure2_HollowCoreFiberAr.png")
-% saveas(figure(3), "Figure3_HollowCoreFiberAr.png")
-% saveas(figure(4), "Figure4_HollowCoreFiberAr.png")
-% saveas(figure(5), "Figure5_HollowCoreFiberAr.png")
-% saveas(figure(6), "Figure6_HollowCoreFiberAr.png")
+% saveas(figure(1), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure1_Ar.png")
+% saveas(figure(2), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure2_Ar.png")
+% saveas(figure(3), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure3_Ar.png")
+% saveas(figure(4), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure4_Ar.png")
+% saveas(figure(5), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure5_Ar.png")
+% saveas(figure(6), "/Users/leonardo/Desktop/Politecnico/5 anno/Nonlinear Optics/Simulation/Figure6_Ar.png")
 
 
 
